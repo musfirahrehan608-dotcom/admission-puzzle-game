@@ -1,0 +1,316 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2870
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fnil\fcharset0 HelveticaNeue-Medium;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;\red255\green255\blue255;}
+{\*\expandedcolortbl;;\cssrgb\c100000\c100000\c100000;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs40 \cf2 \expnd0\expndtw0\kerning0
+\outl0\strokewidth0 \strokec2 html\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs28 \cf2 <!DOCTYPE html>\
+<html lang="en">\
+<head>\
+    <meta charset="UTF-8">\
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">\
+    <title>Matrix Collapse - Academic Portfolio Project</title>\
+    <style>\
+        :root \{\
+            --bg-color: #0f172a;\
+            --card-bg: #1e293b;\
+            --text-main: #f8fafc;\
+            --accent: #3b82f6;\
+        \}\
+\
+        body \{\
+            margin: 0;\
+            padding: 0;\
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;\
+            background-color: var(--bg-color);\
+            color: var(--text-main);\
+            display: flex;\
+            flex-direction: column;\
+            align-items: center;\
+            justify-content: center;\
+            min-height: 100vh;\
+            overflow-x: hidden;\
+        \}\
+\
+        .container \{\
+            width: 90%;\
+            max-width: 440px;\
+            text-align: center;\
+            padding: 20px;\
+        \}\
+\
+        h1 \{\
+            font-size: 2.2rem;\
+            font-weight: 900;\
+            letter-spacing: -1px;\
+            margin-bottom: 5px;\
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);\
+            -webkit-background-clip: text;\
+            -webkit-text-fill-color: transparent;\
+        \}\
+\
+        .subtitle \{\
+            color: #94a3b8;\
+            font-size: 0.9rem;\
+            margin-bottom: 20px;\
+        \}\
+\
+        .score-board \{\
+            display: flex;\
+            justify-content: space-between;\
+            align-items: center;\
+            background-color: var(--card-bg);\
+            padding: 12px 20px;\
+            border-radius: 16px;\
+            margin-bottom: 20px;\
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);\
+        \}\
+\
+        .score-box th \{\
+            font-size: 0.75rem;\
+            color: #64748b;\
+            text-transform: uppercase;\
+        \}\
+\
+        .score-val \{\
+            font-size: 1.4rem;\
+            font-weight: 800;\
+        \}\
+\
+        .btn \{\
+            background-color: var(--accent);\
+            border: none;\
+            color: white;\
+            padding: 10px 16px;\
+            font-size: 0.9rem;\
+            font-weight: 700;\
+            border-radius: 10px;\
+            cursor: pointer;\
+            transition: transform 0.1s ease;\
+        \}\
+\
+        .btn:active \{\
+            transform: scale(0.95);\
+        \}\
+\
+        #grid \{\
+            background-color: var(--card-bg);\
+            width: 100%;\
+            aspect-ratio: 1;\
+            display: grid;\
+            grid-template-columns: repeat(4, 1fr);\
+            grid-gap: 12px;\
+            padding: 12px;\
+            box-sizing: border-box;\
+            border-radius: 24px;\
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);\
+            touch-action: none;\
+        \}\
+\
+        .tile \{\
+            background-color: rgba(148, 163, 184, 0.1);\
+            border-radius: 14px;\
+            display: flex;\
+            align-items: center;\
+            justify-content: center;\
+            font-size: 1.8rem;\
+            font-weight: 800;\
+            transition: all 0.15s ease-in-out;\
+            user-select: none;\
+        \}\
+\
+        /* Portfolio Technical Note styling */\
+        .portfolio-footer \{\
+            margin-top: 30px;\
+            background-color: rgba(30, 41, 59, 0.5);\
+            padding: 15px;\
+            border-radius: 12px;\
+            border: 1px solid rgba(255,255,255,0.05);\
+            text-align: left;\
+        \}\
+\
+        .portfolio-footer h3 \{\
+            font-size: 0.85rem;\
+            margin: 0 0 5px 0;\
+            color: #3b82f6;\
+            text-transform: uppercase;\
+            letter-spacing: 1px;\
+        \}\
+\
+        .portfolio-footer p \{\
+            font-size: 0.8rem;\
+            color: #94a3b8;\
+            margin: 0;\
+            line-height: 1.4;\
+        \}\
+    </style>\
+</head>\
+<body>\
+\
+<div class="container">\
+    <h1>MATRIX MERGE</h1>\
+    <div class="subtitle">Computational Logic Portfolio Project</div>\
+\
+    <div class="score-board">\
+        <div>\
+            <div style="font-size: 0.75rem; color: #64748b; font-weight:700;">SCORE</div>\
+            <div id="score" class="score-val">0</div>\
+        </div>\
+        <button class="btn" onclick="initGame()">Reset Matrix</button>\
+    </div>\
+\
+    <div id="grid"></div>\
+\
+    <div class="portfolio-footer">\
+        <h3>Technical Implementation Notes</h3>\
+        <p>This application implements an deterministic state machine over a two-dimensional matrix array. Shift functions run array collapse routines utilizing linear indexing calculation masks to parse and translate vector states dynamically.</p>\
+    </div>\
+</div>\
+\
+<script>\
+    const gridDisplay = document.getElementById('grid');\
+    const scoreDisplay = document.getElementById('score');\
+    let board = Array(16).fill(0);\
+    let score = 0;\
+\
+    const tileColors = \{\
+        2: \{bg: '#14b8a6', color: '#fff'\},\
+        4: \{bg: '#06b6d4', color: '#fff'\},\
+        8: \{bg: '#0ea5e9', color: '#fff'\},\
+        16: \{bg: '#2563eb', color: '#fff'\},\
+        32: \{bg: '#4f46e5', color: '#fff'\},\
+        64: \{bg: '#7c3aed', color: '#fff'\},\
+        128: \{bg: '#d946ef', color: '#fff'\},\
+        256: \{bg: '#f43f5e', color: '#fff'\}\
+    \};\
+\
+    function initGame() \{\
+        board = Array(16).fill(0);\
+        score = 0;\
+        scoreDisplay.innerText = score;\
+        generateTile();\
+        generateTile();\
+        updateDisplay();\
+    \}\
+\
+    function generateTile() \{\
+        let empties = board.map((val, idx) => val === 0 ? idx : null).filter(val => val !== null);\
+        if (empties.length > 0) \{\
+            let randomIdx = empties[Math.floor(Math.random() * empties.length)];\
+            board[randomIdx] = Math.random() > 0.1 ? 2 : 4;\
+        \}\
+    \}\
+\
+    function updateDisplay() \{\
+        gridDisplay.innerHTML = '';\
+        for (let i = 0; i < 16; i++) \{\
+            const tile = document.createElement('div');\
+            tile.classList.add('tile');\
+            if (board[i] > 0) \{\
+                tile.innerText = board[i];\
+                const styles = tileColors[board[i]] || \{bg: '#b91c1c', color: '#fff'\};\
+                tile.style.backgroundColor = styles.bg;\
+                tile.style.color = styles.color;\
+                tile.style.transform = "scale(1)";\
+            \} else \{\
+                tile.style.backgroundColor = 'rgba(148, 163, 184, 0.08)';\
+            \}\
+            gridDisplay.appendChild(tile);\
+        \}\
+    \}\
+\
+    // Core Linear Transform Collapsing Logic\
+    function slide(rowOrColumn) \{\
+        let filtered = rowOrColumn.filter(val => val !== 0);\
+        for (let i = 0; i < filtered.length - 1; i++) \{\
+            if (filtered[i] === filtered[i + 1]) \{\
+                filtered[i] *= 2;\
+                score += filtered[i];\
+                scoreDisplay.innerText = score;\
+                filtered.splice(i + 1, 1);\
+            \}\
+        \}\
+        while (filtered.length < 4) \{\
+            filtered.push(0);\
+        \}\
+        return filtered;\
+    \}\
+\
+    function move(direction) \{\
+        let changed = false;\
+        let oldBoard = [...board];\
+\
+        for (let i = 0; i < 4; i++) \{\
+            let line = [];\
+            for (let j = 0; j < 4; j++) \{\
+                let idx = (direction === 'left' || direction === 'right') ? (i * 4 + j) : (j * 4 + i);\
+                line.push(board[idx]);\
+            \}\
+\
+            if (direction === 'right' || direction === 'down') line.reverse();\
+            let newLine = slide(line);\
+            if (direction === 'right' || direction === 'down') newLine.reverse();\
+\
+            for (let j = 0; j < 4; j++) \{\
+                let idx = (direction === 'left' || direction === 'right') ? (i * 4 + j) : (j * 4 + i);\
+                board[idx] = newLine[j];\
+            \}\
+        \}\
+\
+        if (oldBoard.some((val, idx) => val !== board[idx])) \{\
+            generateTile();\
+            updateDisplay();\
+            checkGameOver();\
+        \}\
+    \}\
+\
+    function checkGameOver() \{\
+        if (!board.includes(0)) \{\
+            // Evaluates matrix borders for matching adjacent cell vectors\
+            for (let i = 0; i < 4; i++) \{\
+                for (let j = 0; j < 4; j++) \{\
+                    let current = board[i * 4 + j];\
+                    if (j < 3 && current === board[i * 4 + (j + 1)]) return;\
+                    if (i < 3 && current === board[(i + 1) * 4 + j]) return;\
+                \}\
+            \}\
+            alert(`Game Over! Evaluation Matrix filled. Final Score: $\{score\}`);\
+        \}\
+    \}\
+\
+    // Keyboard bindings for computer presentation\
+    window.addEventListener('keydown', (e) => \{\
+        if (e.key === 'ArrowLeft') move('left');\
+        if (e.key === 'ArrowRight') move('right');\
+        if (e.key === 'ArrowUp') move('up');\
+        if (e.key === 'ArrowDown') move('down');\
+    \});\
+\
+    // Touch Support for mobile phone evaluation (iPhone 17 Pro Max)\
+    let touchStartX = 0; let touchStartY = 0;\
+    gridDisplay.addEventListener('touchstart', e => \{\
+        touchStartX = e.changedTouches[0].screenX;\
+        touchStartY = e.changedTouches[0].screenY;\
+    \});\
+\
+    gridDisplay.addEventListener('touchend', e => \{\
+        let diffX = e.changedTouches[0].screenX - touchStartX;\
+        let diffY = e.changedTouches[0].screenY - touchStartY;\
+        if (Math.abs(diffX) > Math.abs(diffY)) \{\
+            if (Math.abs(diffX) > 30) move(diffX > 0 ? 'right' : 'left');\
+        \} else \{\
+            if (Math.abs(diffY) > 30) move(diffY > 0 ? 'down' : 'up');\
+        \}\
+    \});\
+\
+    initGame();\
+</script>\
+</body>\
+</html>\
+}
